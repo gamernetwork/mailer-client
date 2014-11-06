@@ -11,6 +11,15 @@ use \mailer\APIError;
 */
 class Mailer {
     
+    /*
+        Params
+
+        api_root:               Root URL of the mailer API instance EG 
+                                    http://mailer-api.gamer-network.net/api/v1/
+        site:                   Identifier for the site using the API
+        default_sender_email:   Default email to use as sent from email
+        default_sender_name:    Default name to use as sent from name
+    */
     public function __construct($api_root, $site, $default_sender_email,
             $default_sender_name) {
         $this->api_root = $api_root;
@@ -19,6 +28,19 @@ class Mailer {
         $this->default_sender_name = $default_sender_name;
     }
 
+    /*
+        Send a transactional (one off) email to a list of recipients.
+
+        Params
+        users:          List of users to send to, of format 
+                            {'name': 'bob', 'email': 'bob@example.net'}
+        purpose:        Reason for sending this email (for audit trail)
+        subject:        The email subject
+        html_body:      Body text in html
+        txt_body:       (Optional) Body text
+        sender_email:   (Optional) Sent from email
+        sender_name:    (Optional) Sent from name
+    */
     public function send_transactional($users, $purpose, $subject, $html_body,
             $txt_body='', $sender_email=null, $sender_name=null) {
         if ($sender_email == null) {
