@@ -67,10 +67,10 @@ class Mailer {
             'Accept' => 'application/json');
         if ($data) {
             $encoded_data = json_encode($data);
-            $response = Requests::$method($url, $headers, $encoded_data, $options);
+            $response = Requests::$method($url, $headers, $encoded_data);
         }
         else {
-            $response = Requests::$method($url, $headers, $options);
+            $response = Requests::$method($url, $headers);
         }
         switch ($response->status_code) {
             case 200:
@@ -79,7 +79,11 @@ class Mailer {
                 return $response->data;
             default:
                 $response_data = json_decode($response->body, true);
-                throw new APIError($response_data, $response->status_code, "CT returned an error!");
+                $message = "Mailer returned an error: " . $response->status_code;
+                if (array_key_exists('detail', $response_data)) {
+                    $message = $message . " " . $response_data['detail'];
+                }
+                throw new APIError($response_data, $response->status_code, $message);
         }
     }
 }
