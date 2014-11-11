@@ -72,6 +72,14 @@ class Mailer {
         return $this->post("send_transactional", $data);
     }
 
+    public function get_message($message_id) {
+        return $this->get("messages/$message_id");
+    }
+
+    public function get_messages() {
+        return $this->get("messages");
+    }
+
     protected function post($path, $data) {
         $response = $this->call($path, "post", $data);
         return $response;
