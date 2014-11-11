@@ -28,6 +28,16 @@ class Mailer {
         $this->default_sender_name = $default_sender_name;
     }
 
+
+    /*
+        Send a transactional email given a \mailer\Email object and purpose string.
+    */
+    public function send($email, $purpose) {
+        return $this->send_transactional($email->recipients, $purpose,
+            $email->subject, $email->html_body, $email->txt_body, 
+            $email->sender_email, $email->sender_name);
+    }
+
     /*
         Send a transactional (one off) email to a list of recipients.
 
