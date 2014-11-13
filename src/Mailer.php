@@ -120,8 +120,10 @@ class Mailer {
             default:
                 $response_data = json_decode($response->body, true);
                 $message = "Mailer returned an error: " . $response->status_code;
-                if (array_key_exists('detail', $response_data)) {
-                    $message = $message . " " . $response_data['detail'];
+                if ($response_data) {
+                    if (array_key_exists('detail', $response_data)) {
+                        $message = $message . " " . $response_data['detail'];
+                    }
                 }
                 throw new APIError($response_data, $response->status_code, $message);
         }
