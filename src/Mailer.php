@@ -80,6 +80,18 @@ class Mailer {
         return $this->get("messages");
     }
 
+    public function subscribe($email, $subscription) {
+        $data = [
+            "email"             => $email,
+            "subscription_list" => $subscription,
+        ];
+        return $this->post("subscription", $data);
+    }
+
+    public function get_subscriptions($email) {
+        return $this->get("subscription?email=$email");
+    }
+
     protected function post($path, $data) {
         $response = $this->call($path, "post", $data);
         return $response;
