@@ -21,11 +21,13 @@ class Mailer {
         default_sender_name:    Default name to use as sent from name
     */
     public function __construct($api_root, $site, $default_sender_email,
-            $default_sender_name) {
+            $default_sender_name, $auth_username=null, $auth_password=null) {
         $this->api_root = $api_root;
         $this->site = $site;
         $this->default_sender_email = $default_sender_email;
         $this->default_sender_name = $default_sender_name;
+        $this->auth_username = $auth_username;
+        $this->auth_password = $auth_password;
     }
 
 
@@ -117,12 +119,21 @@ class Mailer {
         $url = $this->buildURL($path);
         $headers = array('Content-Type' => 'application/json', 
             'Accept' => 'application/json');
+        $options = [];
+        if ($this->auth_username && $this->auth_password) {
+            $options['auth'] = [$this->auth_username, $this->auth_password];
+        }
         if ($data) {
             $encoded_data = json_encode($data);
-            $response = Requests::$method($url, $headers, $encoded_data);
+            $response = Requests::$method($url, $headers, $encoded_data, $options);
         }
         else {
-            $response = Requests::$method($url, $headers);
+            if ($method == 'get') {
+                $response = Requests::get($url, $headers, $options);
+            }
+            else {
+                $response = Requests::$method($url, $headers, "", $options);
+            }
         }
         switch ($response->status_code) {
             case 200:
