@@ -82,10 +82,11 @@ class Mailer {
         return $this->get("messages");
     }
 
-    public function subscribe($email, $subscription) {
+    public function subscribe($email, $subscription, $send_confirmation = false) {
         $data = [
             "email"             => $email,
             "subscription_list" => $subscription,
+            "send_confirmation" => $send_confirmation,
         ];
         return $this->post("subscription", $data);
     }
