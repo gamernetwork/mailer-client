@@ -78,8 +78,12 @@ class Mailer {
         return $this->get("messages/$message_id");
     }
 
-    public function get_messages() {
-        return $this->get("messages");
+    public function get_messages($subject_filter=null) {
+        $path = "messages";
+        if ($subject_filter) {
+            $path .= "?subject=$subject_filter";
+        }
+        return $this->get($path);
     }
 
     public function subscribe($email, $subscription, $send_confirmation = false) {
