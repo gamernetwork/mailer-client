@@ -38,7 +38,7 @@ class Mailer {
     public function send($email, $purpose) {
         $subject = $email->subject;
         if ($this->subject_prefix) {
-            $subject = $subject_prefix . ': ' . $subject;
+            $subject = $this->subject_prefix . ': ' . $subject;
         }
         return $this->send_transactional($email->recipients, $purpose,
             $subject, $email->html_body, $email->txt_body, 
