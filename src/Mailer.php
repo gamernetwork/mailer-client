@@ -21,13 +21,14 @@ class Mailer {
         default_sender_name:    Default name to use as sent from name
     */
     public function __construct($api_root, $site, $default_sender_email,
-            $default_sender_name, $auth_username=null, $auth_password=null) {
+            $default_sender_name, $auth_username=null, $auth_password=null, $subject_prefix="") {
         $this->api_root = $api_root;
         $this->site = $site;
         $this->default_sender_email = $default_sender_email;
         $this->default_sender_name = $default_sender_name;
         $this->auth_username = $auth_username;
         $this->auth_password = $auth_password;
+        $this->subject_prefix = $subject_prefix;
     }
 
 
@@ -35,8 +36,12 @@ class Mailer {
         Send a transactional email given a \mailer\Email object and purpose string.
     */
     public function send($email, $purpose) {
+        $subject = $email->subject;
+        if ($this->subject_prefix) {
+            $subject = $subject_prefix . ': ' . $subject;
+        }
         return $this->send_transactional($email->recipients, $purpose,
-            $email->subject, $email->html_body, $email->txt_body, 
+            $subject, $email->html_body, $email->txt_body, 
             $email->sender_email, $email->sender_name);
     }
 
