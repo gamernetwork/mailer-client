@@ -60,6 +60,7 @@ class Mailer {
     */
     public function send_transactional($users, $purpose, $subject, $html_body,
             $txt_body='', $sender_email=null, $sender_name=null) {
+        $subject = substr($subject, 0, 69);
         if ($sender_email == null) {
             $sender_email = $this->default_sender_email;
         }
