@@ -19,6 +19,9 @@ class Mailer {
         site:                   Identifier for the site using the API
         default_sender_email:   Default email to use as sent from email
         default_sender_name:    Default name to use as sent from name
+        auth_username:          basicauth username to access api
+        auth_password:          basicauth password to access api
+        subject_prefix:         Prefixes all outgoing mail with this string
     */
     public function __construct($api_root, $site, $default_sender_email,
             $default_sender_name, $auth_username=null, $auth_password=null, $subject_prefix="") {
@@ -84,6 +87,11 @@ class Mailer {
         return $this->get("messages/$message_id");
     }
 
+    /*
+        Get latest messages on the API.        
+            subject_filter: optional.  Filter message results to those 
+                                        starting with this string
+    */
     public function get_messages($subject_filter=null) {
         $path = "messages";
         if ($subject_filter) {
