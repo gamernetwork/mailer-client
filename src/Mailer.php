@@ -24,7 +24,8 @@ class Mailer {
         subject_prefix:         Prefixes all outgoing mail with this string
     */
     public function __construct($api_root, $site, $default_sender_email,
-            $default_sender_name, $auth_username=null, $auth_password=null, $subject_prefix="") {
+            $default_sender_name, $auth_username=null, $auth_password=null, 
+            $subject_prefix="", $verify_ssl=true) {
         $this->api_root = $api_root;
         $this->site = $site;
         $this->default_sender_email = $default_sender_email;
@@ -32,6 +33,7 @@ class Mailer {
         $this->auth_username = $auth_username;
         $this->auth_password = $auth_password;
         $this->subject_prefix = $subject_prefix;
+        $this->verify_ssl = $verify_ssl;
     }
 
 
@@ -141,6 +143,9 @@ class Mailer {
         $options = [];
         if ($this->auth_username && $this->auth_password) {
             $options['auth'] = [$this->auth_username, $this->auth_password];
+        }
+        if ($this->verify_ssl == false) {
+            $options['verify'] = false;
         }
         if ($data) {
             $encoded_data = json_encode($data);
